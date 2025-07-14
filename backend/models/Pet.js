@@ -1,37 +1,38 @@
-import mongoose from '../db/connection.js'
-import { Schema } from 'mongoose'
+const mongoose = require('../db/connection')
+const { Schema } = mongoose
 
-export const Pet = mongoose.model(
+const Pet = mongoose.model(
   'Pet',
-  new Schema(
-    {
-      name: {
-        type: String,
-        required: true
-      },
-      age: {
-        type: Number,
-        required: true
-      },
-      weight: {
-        type: Number,
-        required: true
-      },
-      color: {
-        type: String,
-        required: true
-      },
-      images: {
-        type: Array,
-        required: true
-      },
-      available: {
-        type: Boolean,
-        required: true
-      },
-      user: Object,
-      adopter: Object
+  new Schema({
+    name: {
+      type: String,
+      required: true,
     },
-    { timestamps: true }
-  )
+    age: {
+      type: Number,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    weight: {
+      type: Number,
+      required: true,
+    },
+    color: {
+      type: String,
+      required: true,
+    },
+    images: {
+      type: Array,
+      required: true,
+    },
+    available: {
+      type: Boolean,
+    },
+    user: Object,
+    adopter: Object,
+  }, {timestamps: true}),
 )
+
+module.exports = Pet
