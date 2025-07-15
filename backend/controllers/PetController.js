@@ -6,6 +6,8 @@ const getUserByToken = require('../helpers/get-user-by-token')
 module.exports = class PetController {
   static async createPet(req, res) {
     const { name, age, weight, color } = req.body
+    
+    const images = req.files
 
     const available = true
 
@@ -23,7 +25,12 @@ module.exports = class PetController {
       return
     }
     if(!color) {
-      res.status(422).json({ message: 'A cor é obrigatório!' })
+      res.status(422).json({ message: 'A cor é obrigatória!' })
+      return
+    }
+
+    if(images.length === 0) {
+      res.status(422).json({ message: 'A imagem é obrigatória!' })
       return
     }
 
@@ -43,6 +50,10 @@ module.exports = class PetController {
         image: user.image,
         phone: user.phone,
       },
+    })
+
+    images.map((image) => {
+      pet.images.push(image.filename)
     })
 
     try {
