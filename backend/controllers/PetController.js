@@ -249,4 +249,31 @@ module.exports = class PetController {
       message: `A visita foi agendada com sucesso, entre em contato com ${pet.user.name} pelo telefone ${pet.user.phone}`
     })
   }
+
+  static async concludeAdoption(req, res) {
+    const id = req.params.id
+
+    const pet = await Pet.findOne({ _id: id })
+
+    if(!pet) {
+      res.status(404).json({ message: 'Pet não encontrado' })
+      return
+    }
+
+    const token = getToken(req)
+    const user = await getUserByToken(token)
+
+    if(pet.user._id.toString() != user._id.toString()) {
+      res.status(422).json({ message: 'Houve um problema em processar sua solicitação!' })
+      return
+    }
+
+    pet.available = false
+
+    await Pet.findByIdAndUpdate(id, pet)
+
+    res.status(200).json({
+      message: 'Adoção concluida com sucesso!'
+    })
+  }
 }
